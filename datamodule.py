@@ -24,17 +24,19 @@ class ImageFolderModule(L.LightningDataModule):
         self.test_dir = test_dir
         self.test_transforms = test_transforms
 
-    def prepare_data(self):
-        dataset = ImageFolder(self.root_dir, transform=self.transforms)
-        self.train_set, self.val_set = random_split(
-            dataset,
-            (0.8, 0.2),
-        )
+        self.dataset = ImageFolder(self.root_dir, transform=self.transforms)
 
-        if self.test_dir:
-            self.test_set = ImageFolder(self.test_dir, self.test_transforms)
-        else:
-            self.test_set = self.val_set
+    def setup(self, stage: str):
+        if stage == "fit":
+            self.train_set, self.val_set = random_split(
+                self.dataset,
+                (0.8, 0.2),
+            )
+        if stage == "test":
+            if self.test_dir:
+                self.test_set = ImageFolder(self.test_dir, self.test_transforms)
+            else:
+                self.test_set = self.val_set
 
     def train_dataloader(self):
         return DataLoader(
