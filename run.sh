@@ -6,7 +6,7 @@ python3 main.py \
 --lr 0.0001 \
 --epochs 200 \
 --patience 20 \
---arch vit_small \
---root_dir /media/SSD0/huydnq/Codes/data/dogs-vs-cats/train \
+--arch vit_base \
+--root_dir <training-data-directory> \
 --run run \
---gpu_ids 1
+--gpu_ids 0
