@@ -229,6 +229,7 @@ class VisionTransformer(nn.Module):
         self.norm = norm_layer(embed_dim)
 
         # Classifier head
+        self.num_classes = num_classes
         self.head = (
             nn.Linear(embed_dim, num_classes)
             if num_classes > 0
@@ -288,12 +289,19 @@ class VisionTransformer(nn.Module):
 
         return self.pos_drop(x)
 
-    def forward(self, x):
+    def forward(self, x, return_patch_embeddings: bool = False):
         x = self.prepare_tokens(x)
         for blk in self.blocks:
             x = blk(x)
         x = self.norm(x)
-        return x[:, 0]
+
+        # return full token embeddings, including CLS and patches
+        if return_patch_embeddings:
+            return x
+
+        # return classification output
+        out = self.head(x[:, 0])
+        return out
 
     def get_last_self_attention(self, x):
         x = self.prepare_tokens(x)
