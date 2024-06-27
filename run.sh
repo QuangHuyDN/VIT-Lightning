@@ -1,0 +1,12 @@
+python3 main.py \
+--size 256 \
+--num_classes 1 \
+--in_chans 3 \
+--batch_size 32 \
+--lr 0.0001 \
+--epochs 200 \
+--patience 20 \
+--arch vit_small \
+--root_dir /media/SSD0/huydnq/Codes/data/dogs-vs-cats/train \
+--run run \
+--gpu_ids 1
